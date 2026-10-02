@@ -1,12 +1,25 @@
 import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "https://mess-food-pied.vercel.app",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
+
+console.log("MONGO_URI exists:", !!process.env.MONGO_URI);
+
+// Your routes should come here
 
 mongoose
   .connect(process.env.MONGO_URI)
@@ -20,8 +33,3 @@ mongoose
   .catch((error) => {
     console.error("MongoDB connection failed:", error.message);
   });
-  console.log("URI loaded:", !!process.env.MONGO_URI);
-console.log(
-  "Username:",
-  process.env.MONGO_URI?.split("://")[1]?.split(":")[0]
-);
