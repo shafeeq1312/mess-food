@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -19,7 +20,8 @@ const PORT = process.env.PORT || 5000;
 
 console.log("MONGO_URI exists:", !!process.env.MONGO_URI);
 
-// Your routes should come here
+// Routes
+app.use("/api/auth", authRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)
