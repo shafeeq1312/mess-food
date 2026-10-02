@@ -1,19 +1,27 @@
-import 'dotenv/config';
-import app from './app.js';
-import connectDatabase from './config/database.js';
-import seedAdmin from './config/seedAdmin.js';
+import "dotenv/config";
+import express from "express";
+import mongoose from "mongoose";
 
-const port = process.env.PORT || 5000;
+const app = express();
 
-const startServer = async () => {
-  try {
-    await connectDatabase();
-    await seedAdmin();
-    app.listen(port, () => console.log(`MessMate API running on port ${port}`));
-  } catch (error) {
-    console.error('Server startup failed:', error.message);
-    process.exit(1);
-  }
-};
+app.use(express.json());
 
-startServer();
+const PORT = process.env.PORT || 5000;
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB connected successfully");
+
+    app.listen(PORT, () => {
+      console.log(`MessMate API running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("MongoDB connection failed:", error.message);
+  });
+  console.log("URI loaded:", !!process.env.MONGO_URI);
+console.log(
+  "Username:",
+  process.env.MONGO_URI?.split("://")[1]?.split(":")[0]
+);
